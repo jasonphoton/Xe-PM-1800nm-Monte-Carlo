@@ -1,4 +1,9 @@
 function Main_loop_save_v7_spineffects
+% this is the master file to use for the MC Xenon phase meter simulations
+% at 18000 nm
+%by Max Möller and Danilo Zille
+
+
 % close all
 %   clear all
 
