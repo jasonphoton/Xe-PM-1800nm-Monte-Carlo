@@ -1,13 +1,11 @@
 function Main_loop_save_v7_spineffects
 % this is the master file to use for the MC Xenon phase meter simulations
 % at 18000 nm
-%by Max Möller and Danilo Zille
+%by Max MÃ¶ller and Danilo Zille
 
 
 % close all
 %   clear all
-
-check the branch ! ! ! !!
 
 
 for iruns=1:1000  % how many times do you want to loop over the cep's ?
@@ -216,13 +214,13 @@ load('na_cs.mat');
 cutoff_winkel =20; %der winkel bis zu dem const. in DEG
 inds = find(Winkel<=cutoff_winkel);
 for ind=1:length(cs(:,1))   % energy,winkel
-   cs(ind,inds) = cs(ind,max(inds)+1); %für alle energies, set value to constant
+   cs(ind,inds) = cs(ind,max(inds)+1); %fÃ¼r alle energies, set value to constant
 end
 % flip the winkel vec to go from -pi to 0, then add together
 winkel_total(1:length(Winkel)) = -flipud(Winkel);
 winkel_total(length(Winkel)+1:2*length(Winkel)-1) = Winkel(2:length(Winkel));
 % do the same with the cs
-for ind=1:length(cs(:,1))    % für alle energien flippe
+for ind=1:length(cs(:,1))    % fÃ¼r alle energien flippe
 cs_total(ind,1:length(Winkel)) = fliplr(cs(ind,:));
 cs_total(ind,length(Winkel)+1:2*length(Winkel)-1) = cs(ind,2:length(Winkel));
 end
