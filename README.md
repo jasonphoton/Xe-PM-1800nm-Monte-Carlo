@@ -4,9 +4,9 @@ Extend the monte carlo code to perform several parameter scans for the Xenon pha
 
 Task distribution :
 
-Danilo: explain code on ??.11.2016
+Danilo: explain code to Yinyu on ??.11.2016
 
 
 Daniel W.:
 
-Xin... :
+Yinyu: 
