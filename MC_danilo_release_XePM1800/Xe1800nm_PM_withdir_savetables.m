@@ -7,7 +7,6 @@ function Main_loop_save_v7_spineffects
 % close all
 %   clear all
 
-9==8;
 
 for iruns=1:1000  % how many times do you want to loop over the cep's ?
     
@@ -112,6 +111,8 @@ movefile(strcat(atom,'.mat'),foldername)
 end
 
 end
+
+check here    reading label
 
 function [vxf_all vyf_all vzf_all vxf_dir vyf_dir vzf_dir vxf_resc vyf_resc vzf_resc T] = singleICEP_v0(IWcm,CEP,pulse_,atom,nsample,savename,dt,s) 
 
