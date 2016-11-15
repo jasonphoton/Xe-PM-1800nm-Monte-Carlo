@@ -8,22 +8,22 @@ function Main_loop_save_v7_spineffects
 %   clear all
 
 
-for iruns=1:1000  % how many times do you want to loop over the cep's ?
+for iruns=1:1  % how many times do you want to loop over the cep's ?
     
 % pulse characteristics
-n        = 7;                                   % propto pulse duration, (cos^2)
+n        = 3;                                   % propto pulse duration, (cos^2)
 N        = 0;                                   % propto flat part
 wvlm     = 1800e-9;                            %
-atom     = 'sodium'; % %atom     = 'He1s2s-singlet';    %'He1s2s-triplet'
+atom     = 'Xe'; % %atom     = 'He1s2s-singlet';    %'He1s2s-triplet'
 s        = 3/2;
 pulse    = [n N wvlm];
 dt       = 0.1;               % temporaresolution
 kmax     = 25;              % number of ceps
-nsample  = 2e7;             % number of particles per cep
+nsample  = 2e5;             % number of particles per cep
 
 
 % focal characteristics
-I0    = 6e12;             % I0, [W/cm^2], peak intensity
+I0    = 1e14;             % I0, [W/cm^2], peak intensity
 w0    = 0.087;            % w0, [mm]
 Zr    = 3.3;              % Zr, [mm]
 
@@ -31,15 +31,17 @@ Zr    = 3.3;              % Zr, [mm]
 IWcm_grid_Vavg       = 1e12:0.1e12:I0;
 % IWcm_grid_Vavg       = 1e11:2e11:I0;   % for single intensity!!!
 NI_Vavg              = length(IWcm_grid_Vavg);
-PlotOpt              =0;
+PlotOpt              = 0;
 [Iaxis_Vavg,hist_Isample_Vavg] = fct_get_IhistVavg_zR(w0,I0,Zr,IWcm_grid_Vavg,PlotOpt);
 
 % ion yield in igrid from intensity distribution
 IonYield = zeros(1,length(hist_Isample_Vavg));
+
 for l=1:1:NI_Vavg
     [Yield]  = fct_get_IonYield(atom,Iaxis_Vavg(l),0,pulse);        % CEP = 0 ist a good estimate
     IonYield(l) = Yield;  
 end
+
 hist_Isample_Vavg = hist_Isample_Vavg./max(hist_Isample_Vavg);
 IonYield          = IonYield./max(IonYield);
 Y_Vavg_Iyield     = (hist_Isample_Vavg.*IonYield)./sum(hist_Isample_Vavg.*IonYield);
@@ -112,7 +114,7 @@ end
 
 end
 
-check here    reading label
+% % check here    reading label
 
 function [vxf_all vyf_all vzf_all vxf_dir vyf_dir vzf_dir vxf_resc vyf_resc vzf_resc T] = singleICEP_v0(IWcm,CEP,pulse_,atom,nsample,savename,dt,s) 
 
@@ -132,7 +134,7 @@ T        = 2.*pi./omega;
 Up       = (0.09337.*IWcm.*(wvlm.^2))./27.211;   % au
 
 %% define the field
-[Env E I A ALPHA BETA v r tgrid E_fh] = fct_get_EnvEIAAlphBetvr_sin2_nN(dt,wvlm,IWcm,CEP,n,N);
+[Env E I A ALPHA , ~, v r tgrid E_fh] = fct_get_EnvEIAAlphBetvr_sin2_nN(dt,wvlm,IWcm,CEP,n,N);
 % ind = find(I>0.5.*max(I));
 % tp  = tgrid(max(ind))-tgrid(min(ind));
 %disp(['n= ',num2str(n),'i.e. tp = ',num2str(tp.*24.2e-18/1e-15),' fs at a wvl of ',num2str(wvlm./1e-6),' mum'])
@@ -206,7 +208,7 @@ sigwp   = @(ts,tr)   (tr-ts).^(-s); %sigwp   = @(ts,tr)   (tr-ts).^(-s);
 %% cross-section for noble gas potential?
 
 % now load the numerical cross sections
-if strcmp(atom,'sodium')==1
+if strcmp(atom,'Xe')==1
 load('na_cs.mat');
 
 
@@ -243,7 +245,12 @@ texit_ind = 1:1:length(tgrid);%2.65e4:1:2.93e4;%1:1:length(tgrid);
 nr_ceps = 25; % ALWAYS SET THIS kmax BY HAND
 dcep = 2*pi/nr_ceps;% !! PAY ATTENTION. you must divide by kmax
 
-load_table = 0; % each time you enter new laser parameters, or different cep grid you need to create new tables first
+if (iruns==1)
+load_table = 0;
+else
+load_table = 1;
+end% each time you enter new laser parameters, or different cep grid you need to create new tables first
+
 table_name = strcat(num2str(CEP/dcep),'_',num2str(wvlm*10^3),'mu_',num2str(n),'_n_',num2str(dt),'dt',num2str(nr_ceps),'_ceps_table.mat');
 
 if load_table==1
@@ -251,7 +258,7 @@ load(table_name);
 else
 [trind_mat tr_mat tt_mat rescind dirind] = fct_get_return1Traj1D_v2(tgrid,texit_ind,zeros(1,length(tgrid)),zeros(1,length(tgrid)),r,rcov,NrMax,PlotOpt);
 toc
-save(tablename,'trind_mat','tr_mat','tt_mat','rescind','dirind');
+save(table_name,'trind_mat','tr_mat','tt_mat','rescind','dirind');
 end
 disp('found return list')
         
