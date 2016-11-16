@@ -4,15 +4,4 @@ Extend the monte carlo code to perform several parameter scans for the Xenon pha
 Task List:
 
 1) Explain Code.
-2) Write a program, that produces tables automatically and seperatedly.
-3) ...
-.
 
-Task distribution :
-
-
-Danilo: 1)
-
-Daniel W.:
-
-Yinyu: 2)
