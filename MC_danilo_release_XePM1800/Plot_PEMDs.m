@@ -14,7 +14,7 @@ for ii=anfang:ende
     b = b + hist_vyvz_dir_loop_01;
 cd('..')
 end
-hist_vyvz_resc_loop_01=a;
+hist_vyvz_resc_loop_01 = a;
 hist_vyvz_dir_loop_01 = b;
 
     save('sodium.mat');

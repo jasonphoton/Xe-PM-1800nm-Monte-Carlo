@@ -2,17 +2,17 @@ close all
 clear all
 
 %%  Pulse parameters
-n           = 2;                % n ..... sin^2 cycles on ramp
+n           = 3;                % n ..... sin^2 cycles on ramp
 N           = 0;                % N ..... sin^2 cycles on flat top
-I0          = 1.2e14;           % I0 .... peak intensity of pulse
+I0          = 0.65e14;           % I0 .... peak intensity of pulse
 wvlm        = 1800e-9;          % wvlm .. center wavelength
 
 %% Calculation parameters
-kmax        = 15;                % kmax ..... over how many intensities do you want to average ?
-nsample     = 5e6;              % nsample ..... how many electrons do you want to simulate for EACH int.?
-int_spacing = 100 ;             % int_spacing ... how many intensities do you want to have in the linspace?
+kmax        = 300;                % kmax ..... over how many intensities do you want to average ?
+nsample     = 1e6;              % nsample ..... how many electrons do you want to simulate for EACH int.?
+int_spacing = 300;             % int_spacing ... how many intensities do you want to have in the linspace?
 
-%% Cross section parameters
+%% Cross section para meters
 atom        = 'Xe';
 cutoff_winkel = 20;         % cutoff_winkel ... the angle until which you want to set the cross section constant in DEGREE (used to take care of the divergent forward-scattering)
 cross_section_fname = 'xe_cs.mat';
@@ -20,10 +20,10 @@ cross_section_fname = 'xe_cs.mat';
 %% define the field
 IWcm      = I0;
 dt        = 0.1;
-CEP         = 0;                % changable in the loop
+CEP       = 0;                % changable in the loop
 [Env E I A ALPHA BETA v r tgrid E_fh] = fct_get_EnvEIAAlphBetvr_sin2_nN(dt,wvlm,IWcm,CEP,n,N);
 ind = find(I>0.5.*max(I));
-tp  = tgrid(max(ind))-tgrid(min(ind));
+tp  = tgrid(max(ind))-tgrid(min(ind)); 
 tp_fs =round(tp.*24.2e-18/1e-15,1);
 
 %% Return time tables
@@ -43,5 +43,4 @@ for j = 1:nr_ceps
            
     fct_Xe1800nm_PM_withdir_savetables( n, N, CEP, kmax, nsample, I0,...
                  int_spacing, savename2, cross_section_fname, cutoff_winkel, save_tables, table_name )
-
 end
