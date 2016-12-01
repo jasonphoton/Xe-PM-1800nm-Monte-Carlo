@@ -65,11 +65,7 @@ hist_Isample= hist(Isample,Iaxis_Vavg);
 % prepare name1 for this run
 savestr =  ['n',num2str(n),'_N',num2str(N),'_',atom,'_',num2str(wvlm./1e-9),'_Ip',num2str(I0,'%10.1e\n')];
 
-<<<<<<< HEAD
-resol = 0.01; %0.002 ist ok, aber ehr zu fein, 0.0857 == 0.1eV
-=======
 resol = 0.02; %0.002 ist ok, aber ehr zu fein, 0.0857 == 0.1eV
->>>>>>> 3f135f51e9c7cff87ef94f9e93d6fa4ee569bc2d
 
 Up       = (0.09337.*I0.*(wvlm.^2))./27.211;   % aumu
 % set up the size of the histogram
@@ -89,9 +85,6 @@ for k=1:kmax % loop over intensities
     tic
     Pnorm          = Y_Vavg_Iyield;
     intens_ind     = fct_gen_distr(Pnorm,1,1);
-<<<<<<< HEAD
-    Isample(k)     = Iaxis_Vavg(intens_ind);
-=======
 
     
     if intens_ind < max(intens_ind)
@@ -104,7 +97,6 @@ for k=1:kmax % loop over intensities
 %     ysample = Vpegrid(ind)+rand(1,nsample).*(vpegrid(2)-vpegrid(1))/2;
     
     
->>>>>>> 3f135f51e9c7cff87ef94f9e93d6fa4ee569bc2d
     CEPsample      = CEP;
     savename1      = [num2str(k),'_',savestr,'.mat'];
     
@@ -126,10 +118,7 @@ display(strcat('Volume intensity ',num2str(k),' done and PEMD saved!'));
 
    % %     savename2    = [num2str(k),'_all',savestr,'.mat'];
        save(savename2, 'vpagrid_01','vpegrid_01','hist_vyvz_resc_loop_01','hist_vyvz_dir_loop_01');
-<<<<<<< HEAD
-=======
     toc   
->>>>>>> 3f135f51e9c7cff87ef94f9e93d6fa4ee569bc2d
 end
 
 

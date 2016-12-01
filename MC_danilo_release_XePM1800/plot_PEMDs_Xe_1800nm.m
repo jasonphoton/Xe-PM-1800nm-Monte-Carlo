@@ -1,12 +1,8 @@
 %% here plot the log 10 vmi map after adding up all single dstribution electron loops
-<<<<<<< HEAD
-    
-=======
 
 clear all
 close all
 
->>>>>>> 3f135f51e9c7cff87ef94f9e93d6fa4ee569bc2d
 %% Single CEP plot
 
 c0       = 299792458./(2.1876912633e6);        % au, speed of light 
@@ -18,19 +14,11 @@ IWcm     = 1.2e14;
 Up       = (0.09337.*IWcm.*wvlm.^2)./27.211;   % au     
 pmax     = sqrt(2*10*Up);
 
-<<<<<<< HEAD
-resol    = 0.01;                               % 0.002 ist ok, aber ehr zu fein, 0.0857 == 0.1eV
-
-cd(strcat('n_2_N_0_wvl_1800_I0_1.2e+14_dt_0.1_kmax_15_nsample_5e+06'))
-
-for i = 1 : 6
-=======
 % resol    = 0.01;                               % 0.002 ist ok, aber ehr zu fein, 0.0857 == 0.1eV
 
 cd(strcat('n_2_N_0_wvl_1800_I0_1.0e+14_dt_0.1_kmax_120_nsample_5e+06'))
 
 for i = 1 : 25
->>>>>>> 3f135f51e9c7cff87ef94f9e93d6fa4ee569bc2d
     
     
     file_name = strcat('1800nm_Xe_8.7fs_',num2str(i),'_25ceps_CEP.mat');
@@ -60,22 +48,14 @@ for i = 1 : 25
     set(xlhand,'string','P_x','fontsize',16) ;
     ylhand = get(gca,'ylabel');
     set(ylhand,'string','P_z','fontsize',16) ;
-<<<<<<< HEAD
-    title(strcat('Rescatteredt Yield,','CEP steps ',num2str(i),', resolution = ', num2str(resol)))
-=======
     title(strcat('Rescatteredt Yield,','CEP steps ',num2str(i)))
->>>>>>> 3f135f51e9c7cff87ef94f9e93d6fa4ee569bc2d
     set(gcf,'color','w'); % set figure background to white
     axis tight
 
     M(i)=getframe(gcf)
 end
 
-<<<<<<< HEAD
-movie2avi(M,'CEP.avi','FPS',1)
-=======
 movie2avi(M,'8.7fs .avi','FPS',2)
->>>>>>> 3f135f51e9c7cff87ef94f9e93d6fa4ee569bc2d
 
 
 

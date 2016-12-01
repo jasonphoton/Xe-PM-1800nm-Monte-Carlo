@@ -21,15 +21,7 @@ nsample  = 2e5;             % number of particles per cep
 
 
 % focal characteristics
-<<<<<<< HEAD
-<<<<<<< HEAD
-I0    = 1e14;             % I0, [W/cm^2], peak intensity
-=======
 I0    = 1.2e14;             % I0, [W/cm^2], peak intensity
->>>>>>> aaadef32e8d3ed2147a7a26db48eed0f0682ca36
-=======
-I0    = 1.2e14;             % I0, [W/cm^2], peak intensity
->>>>>>> 3f135f51e9c7cff87ef94f9e93d6fa4ee569bc2d
 w0    = 0.087;            % w0, [mm]
 Zr    = 3.3;              % Zr, [mm]
 
@@ -140,24 +132,11 @@ T        = 2.*pi./omega;
 Up       = (0.09337.*IWcm.*(wvlm.^2))./27.211;   % au
 
 %% define the field
-<<<<<<< HEAD
-<<<<<<< HEAD
-[Env E I A ALPHA , ~, v r tgrid E_fh] = fct_get_EnvEIAAlphBetvr_sin2_nN(dt,wvlm,IWcm,CEP,n,N);
-% ind = find(I>0.5.*max(I));
-% tp  = tgrid(max(ind))-tgrid(min(ind));
-%disp(['n= ',num2str(n),'i.e. tp = ',num2str(tp.*24.2e-18/1e-15),' fs at a wvl of ',num2str(wvlm./1e-6),' mum'])
-=======
-=======
->>>>>>> 3f135f51e9c7cff87ef94f9e93d6fa4ee569bc2d
 [Env E I A ALPHA BETA v r tgrid E_fh] = fct_get_EnvEIAAlphBetvr_sin2_nN(dt,wvlm,IWcm,CEP,n,N);
 ind = find(I>0.5.*max(I));
 tp  = tgrid(max(ind))-tgrid(min(ind));
 tp_fs =round(tp.*24.2e-18/1e-15,1);
 % disp(['n= ',num2str(n),'i.e. tp = ',num2str(tp_fs),' fs at a wvl of ',num2str(wvlm./1e-6),' mum'])
-<<<<<<< HEAD
->>>>>>> aaadef32e8d3ed2147a7a26db48eed0f0682ca36
-=======
->>>>>>> 3f135f51e9c7cff87ef94f9e93d6fa4ee569bc2d
 % plot(tgrid,Env,tgrid,E,'LineWidth',4,'Color','r')
 % set(gcf,'color','w'); % set figure background to white
 %% function handle for bsi
@@ -229,15 +208,7 @@ sigwp   = @(ts,tr)   (tr-ts).^(-s); %sigwp   = @(ts,tr)   (tr-ts).^(-s);
 
 % now load the numerical cross sections
 if strcmp(atom,'Xe')==1
-<<<<<<< HEAD
-<<<<<<< HEAD
-load('na_cs.mat');
-=======
 load('xe_cs.mat');
->>>>>>> aaadef32e8d3ed2147a7a26db48eed0f0682ca36
-=======
-load('xe_cs.mat');
->>>>>>> 3f135f51e9c7cff87ef94f9e93d6fa4ee569bc2d
 
 
 % the first few angles are divergent, so set them all to some constant
@@ -273,29 +244,12 @@ texit_ind = 1:1:length(tgrid);%2.65e4:1:2.93e4;%1:1:length(tgrid);
 nr_ceps = 25; % ALWAYS SET THIS kmax BY HAND
 dcep    = 6.25/nr_ceps;% !! PAY ATTENTION. you must divide by kmax, 2pi = 6.28,
 cep_rad = round(floor(CEP/dcep).*dcep,2);
-<<<<<<< HEAD
 
-<<<<<<< HEAD
-if (iruns==1)
-load_table = 0;
-else
-load_table = 1;
-end% each time you enter new laser parameters, or different cep grid you need to create new tables first
-
-table_name = strcat(num2str(CEP/dcep),'_',num2str(wvlm*10^3),'mu_',num2str(n),'_n_',num2str(dt),'dt',num2str(nr_ceps),'_ceps_table.mat');
-=======
-=======
-
->>>>>>> 3f135f51e9c7cff87ef94f9e93d6fa4ee569bc2d
 load_table = 0; % each time you enter new laser parameters, or different cep grid you need to create new tables first
 
 % table_name = strcat(num2str(CEP/dcep),'_',num2str(wvlm*10^3),'mu_',num2str(n),'_n_',num2str(dt),'dt',num2str(nr_ceps),'_ceps_table.mat');
 table_name = strcat(num2str(wvlm*10^9),'nm_',num2str(atom),'_',num2str(tp_fs),'fs_',num2str(cep_rad),'CEP_','table.mat');
 
-<<<<<<< HEAD
->>>>>>> aaadef32e8d3ed2147a7a26db48eed0f0682ca36
-=======
->>>>>>> 3f135f51e9c7cff87ef94f9e93d6fa4ee569bc2d
 
 if load_table==1
 load(table_name);
