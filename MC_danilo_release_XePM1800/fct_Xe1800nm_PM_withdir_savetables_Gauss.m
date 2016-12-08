@@ -67,7 +67,7 @@ hist_Isample= hist(Isample,Iaxis_Vavg);
 % prepare name1 for this run
 savestr =  ['n',num2str(n),'_N',num2str(N),'_',atom,'_',num2str(wvlm./1e-9),'_Ip',num2str(I0,'%10.1e\n')];
 
-resol = 0.02; %0.002 ist ok, aber ehr zu fein, 0.0857 == 0.1eV
+resol = 0.02; %0.002 ist ok, aber ehr zu fein
 
 Up       = (0.09337.*I0.*(wvlm.^2))./27.211;   % aumu
 % set up the size of the histogram

@@ -15,22 +15,17 @@ PlotOpt         = 1;
 CEP             = 0;
 dt              = 0.01;
 %% Calculation parameters
-<<<<<<< HEAD
 kmax            = 2;              % kmax ..... over how many intensities do you want to average ?
 nsample         = 1e7;              % nsample ..... how many electrons do you want to simulate for EACH int.?
 int_spacing     = 100;              % int_spacing ... how many intensities do you want to have in the linspace?
-=======
-kmax            = 80;              % kmax ..... over how many intensities do you want to average ?
-nsample         = 1e6;              % nsample ..... how many electrons do you want to simulate for EACH int.?
-int_spacing     = 80;              % int_spacing ... how many intensities do you want to have in the linspace?
->>>>>>> f9ace3f14ba944ec07e6ee34f92f7b6a01bcabce
+
 
 %% Cross section para meters
 atom                = 'Xe';
 cutoff_winkel       = 20;             % cutoff_winkel ... the angle until which you want to set the cross section constant in DEGREE (used to take care of the divergent forward-scattering)
 cross_section_fname = 'xe_cs.mat';
 
-%% define the field
+%% define the field - this part is useless, none of the created fields are used. (only good for debugging maybe=)
 start_at_0      = 0;                 % Gauss field start point. normally is 0
 kdoubleprime    = 0;                 % chirp
 z               = 0;                 % propagation distance, no chirp with z = 0
@@ -44,7 +39,7 @@ cutoff          = 0.00000001;
 save_tables = 1;            % save_tables ... 1 switch on to save tables, 0 tables exists.
 
 %% Main CEP function
-nr_ceps = 1; 
+nr_ceps = 25; 
 
 CEP_vec = linspace(0, 2*pi, nr_ceps);
 

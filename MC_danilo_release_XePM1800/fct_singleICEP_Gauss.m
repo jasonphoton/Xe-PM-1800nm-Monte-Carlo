@@ -14,7 +14,6 @@ T        = 2.*pi./omega;
 
 %% define the field
 PlotOpt   = 0;
-cutoff    = 0.0001;            %   cutoff for guassian field
 [ tgrid, A, E, Env, pulselength ] = fct_master_fields_shared( PlotOpt, type, start_at_0, wvlnm,...
                                          IWcm, CEP, dt, cutoff, z, kdoubleprime, fwhm_nochirp, n_c );
  
@@ -28,17 +27,6 @@ cutoff    = 0.0001;            %   cutoff for guassian field
     % integration vector potential from -infinity to t
     ALPHA = cumsum(A_interp(:))*dt;
     ALPHA = [0 ; ALPHA(1:1:end-1)];
-<<<<<<< HEAD
-
-    %integration (vector potential)² from -infinity to t
-    BETA = cumsum(A_interp.^2)*dt;
-    BETA = [0 BETA(1:1:end-1)];
-
-    %trajectorie of electron released at time tr
-    v = @(tr_index) A - A(tr_index);
-    r = @(tr_index) ALPHA - ALPHA(tr_index)-A(tr_index).*(tgrid'-tgrid(tr_index));
-=======
->>>>>>> f9ace3f14ba944ec07e6ee34f92f7b6a01bcabce
 
     %integration (vector potential)² from -infinity to t
     BETA = cumsum(A_interp.^2)*dt;
