@@ -1,4 +1,4 @@
-function [ tgrid, A, E_real, Env, pulselength ] = fct_master_fields_shared( PlotOpt, type, start_at_0, wvlnm, IWcm, CEP, dt, cutoff, z, kdoubleprime, fwhm_nochirp, n_c )
+function [ tgrid, A, E_real, E , Env, r, pulselength ] = fct_master_fields_shared( PlotOpt, type, start_at_0, wvlnm, IWcm, CEP, dt, cutoff, z, kdoubleprime, fwhm_nochirp, n_c )
 %FCT_MASTER_FIELDS by Danilo Zille
 
 % Version: 2.1
@@ -31,45 +31,44 @@ function [ tgrid, A, E_real, Env, pulselength ] = fct_master_fields_shared( Plot
 % Env ... electric field envelope
 % pulselength ... in fs
 
-c0       = 299792458./(2.1876912633e6);        % au, speed of light 
-E0    =  sqrt(IWcm/3.509e16); %convert to au
-wvlm     = wvlnm*1e-9;                    
-wvl      = wvlm/(5.2917720859e-11);         % [au]
-omega    = (2*pi*c0)/wvl;                           % [au], angular frequency
-kdoubleprime = kdoubleprime*(41.34)^2;% 44.929  *41^2 ;  %a.u. GVD  au^2/mm
-fwhm_nochirp = fwhm_nochirp*41.34; % to a.u.
-
-
+c0              = 299792458./(2.1876912633e6);              % au, speed of light 
+E0              = sqrt(IWcm/3.509e16);                      % convert to au
+wvlm            = wvlnm*1e-9;                    
+wvl             = wvlm/(5.2917720859e-11);                  % [au]
+omega           = (2*pi*c0)/wvl;                            % [au], angular frequency
+kdoubleprime    = kdoubleprime *(41.34)^2;                  % 44.929  *41^2 ;  %a.u. GVD  au^2/mm
+fwhm_nochirp    = fwhm_nochirp * 41.34;                     % to a.u.
 
 if (strcmp(type,'gauss'))
-        %define the vector potential in analytical form. then derive E-field
-        % field from Effects of the carrier-envelope phase of chirped laser pulses in the multiphoton ionization regime - E.Cormier
-        %note that the field was slightly altered, since in the paper the pulse lenght is measured in the field envelope. but we measure intensity envelope
-        xi =  4*log(2)*kdoubleprime*z / fwhm_nochirp^2;
-        t_end = sqrt(log(cutoff)/(-4*log(2)) * (1+xi^2) )*fwhm_nochirp;
-  
-               
-        if (start_at_0 == 1)
-            tgrid  = 0:dt:2*t_end;
-            E = @(t) E0 * exp(-1i*(omega*(t-t_end)+CEP) - 2*log(2).*((t-t_end)/fwhm_nochirp).^2*(1/(1-1i*xi)));
-        else
-            tgrid  = -t_end:dt:t_end;
-            E = @(t) E0 * exp(-1i*(omega*t+CEP) - 2*log(2).*(t/fwhm_nochirp).^2*(1/(1-1i*xi)));
-        end
+    %define the vector potential in analytical form. then derive E-field
+    % field from Effects of the carrier-envelope phase of chirped laser pulses in the multiphoton ionization regime - E.Cormier
+    %note that the field was slightly altered, since in the paper the pulse lenght is measured in the field envelope. but we measure intensity envelope
+    xi =  4*log(2)*kdoubleprime*z / fwhm_nochirp^2;
+    t_end = sqrt(log(cutoff)/(-4*log(2)) * (1+xi^2) )*fwhm_nochirp;
+                 
+    if (start_at_0 == 1)
+        tgrid  = 0:dt:2*t_end;
+        E = @(t) E0 * exp(-1i*(omega*(t-t_end)+CEP) - 2*log(2).*((t-t_end)/fwhm_nochirp).^2*(1/(1-1i*xi)));
+    else
+        tgrid  = -t_end:dt:t_end;
+        E = @(t) E0 * exp(-1i*(omega*t+CEP) - 2*log(2).*(t/fwhm_nochirp).^2*(1/(1-1i*xi)));
+    end
            
-        E = E(tgrid);
-        E_real = real((E));
-        A = -cumsum(E_real)*dt;
-        Env = @(t) sqrt(conj(E).*E);
-        Env = Env(tgrid);
-        int_Env = Env.*Env;
-        ind = find(int_Env>0.5.*max(int_Env));
-        pulselength  = tgrid(max(ind))-tgrid(min(ind));
-         
+    E = E(tgrid);
+    E_real = real((E));
+    A = -cumsum(E_real)*dt;
+    Env = @(t) sqrt(conj(E).*E);
+    Env = Env(tgrid);
+    int_Env = Env.*Env;
+    ind = find(int_Env>0.5.*max(int_Env));
+    pulselength  = tgrid(max(ind))-tgrid(min(ind));        
 
-                    
+    
+    
+    
+    
+    
 elseif (strcmp(type,'sin2'))
-
 
     ww=omega/(2.0*n_c);
     duration=n_c*2*pi/omega;
@@ -93,14 +92,32 @@ elseif (strcmp(type,'sin2'))
 
 end
 
+    A_interp = [0 A];
+    for i = 1:length(A)
+        A_interp(i) = (A_interp(i)+A_interp(i+1))/2;
+    end
+    A_interp = A_interp(1:1:end-1);
+    A        = [0 A(1:1:end-1)];
+
+    % integration vector potential from -infinity to t
+    ALPHA = cumsum(A_interp(:))*dt;
+    ALPHA = [0 ; ALPHA(1:1:end-1)];
+
+    %integration (vector potential)² from -infinity to t
+    BETA = cumsum(A_interp.^2)*dt;
+    BETA = [0 BETA(1:1:end-1)];
+
+    %trajectorie of electron released at time tr
+    v = @(tr_index) A - A(tr_index);
+    r = @(tr_index) ALPHA - ALPHA(tr_index)-A(tr_index).*(tgrid'-tgrid(tr_index));
+
+
+
 pulselength = pulselength / 41.34; % to fs              
     
-        if (PlotOpt==1) 
-            plot(tgrid,E_real,tgrid,A*omega,tgrid,Env);
-            legend('E','A*omega','Envelope');
-        end      
-    
-
+if (PlotOpt==1) 
+    plot(tgrid,E_real,tgrid,A*omega,tgrid,Env);
+    legend('E','A*omega','Envelope');
+end      
 
 end
-
