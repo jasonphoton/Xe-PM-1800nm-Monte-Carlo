@@ -1,4 +1,4 @@
-function [vxf_all vyf_all vzf_all vxf_dir vyf_dir vzf_dir vxf_resc vyf_resc vzf_resc T] = fct_singleICEP_v0_Gauss(int_index, IWcm,CEP,pulse_,atom,nsample,savename,dt,s,...
+function [vxf_all vyf_all vzf_all vxf_dir vyf_dir vzf_dir vxf_resc vyf_resc vzf_resc T] = fct_singleICEP_Gauss(int_index, IWcm,CEP,pulse_,atom,nsample,savename,dt,s,...
                                                                                                            cross_section_fname, cutoff_winkel, save_tables, table_name,...
                                                                                                            type, start_at_0, wvlnm, cutoff, z, kdoubleprime, fwhm_nochirp, n_c) 
 % int_index is used to create a new table a the beginning of intensity averaging loop
@@ -12,13 +12,30 @@ wvl      = wvlm/(5.2917720859e-11);              % [au]
 omega    = (2*pi*c0)/wvl;                        % [au], angular frequency
 T        = 2.*pi./omega;
 
-
 %% define the field
 PlotOpt   = 0;
 cutoff    = 0.0001;            %   cutoff for guassian field
-[ tgrid, A, E_real, E , Env, r, pulselength ] = fct_master_fields_shared( PlotOpt, type, start_at_0, wvlnm,...
+[ tgrid, A, E, Env, pulselength ] = fct_master_fields_shared( PlotOpt, type, start_at_0, wvlnm,...
                                          IWcm, CEP, dt, cutoff, z, kdoubleprime, fwhm_nochirp, n_c );
  
+    A_interp = [0 A];
+    for i = 1:length(A)
+        A_interp(i) = (A_interp(i)+A_interp(i+1))/2;
+    end
+    A_interp = A_interp(1:1:end-1);
+    A        = [0 A(1:1:end-1)];
+
+    % integration vector potential from -infinity to t
+    ALPHA = cumsum(A_interp(:))*dt;
+    ALPHA = [0 ; ALPHA(1:1:end-1)];
+
+    %integration (vector potential)² from -infinity to t
+    BETA = cumsum(A_interp.^2)*dt;
+    BETA = [0 BETA(1:1:end-1)];
+
+    %trajectorie of electron released at time tr
+    v = @(tr_index) A - A(tr_index);
+    r = @(tr_index) ALPHA - ALPHA(tr_index)-A(tr_index).*(tgrid'-tgrid(tr_index));
 
 %% function handle for bsi
 Fc = @(kappa_,Z_,m_) (kappa_.^4)./(8.*(2.*Z_-kappa_.*(m_+1)));

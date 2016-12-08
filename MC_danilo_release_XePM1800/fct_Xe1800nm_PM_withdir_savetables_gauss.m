@@ -3,7 +3,7 @@ function   fct_Xe1800nm_PM_withdir_savetables_Guass( n, N, CEP, nr_ceps, kmax, n
                                            type, start_at_0, wvlnm, cutoff, z, kdoubleprime, fwhm_nochirp, n_c)
 
 % this is the master function to use for the MC Xenon phase meter simulations
-% at 18000 nm, some laser parameters need to be changed IN the function and
+% at 1800 nm, some laser parameters need to be changed IN the function and
 % aren't passed as a variable, e.g. wvlm, w0, ...
 
 % Input variables:
