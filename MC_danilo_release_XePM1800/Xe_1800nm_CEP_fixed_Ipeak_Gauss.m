@@ -6,8 +6,8 @@ type            = 'gauss'           %   'gauss'    and    'sin2'
 I0              = 0.8e14;           % I0 .... peak intensity of pulse
 IWcm            = I0;               % w/cm2   
 wvlnm           = 1800;             % unit nm .. center wavelength
-wvlm            = 1800e-9;          % unit m .. center wavelength
-fwhm_nochirp    = 13.1;              % FWHM of FTL
+wvlm            = wvlnm*1e-9;          % unit m .. center wavelength
+fwhm_nochirp    = 8.7;              % FWHM of FTL
 n_c             = 6;                % only for sin2 field, numbers of cycles  
 n               = 3;                % not used
 N               = 0;                % old code not used
@@ -15,9 +15,9 @@ PlotOpt         = 0;
 CEP             = 0;
 dt              = 0.01;
 %% Calculation parameters
-kmax            = 300;              % kmax ..... over how many intensities do you want to average ?
+kmax            = 80;              % kmax ..... over how many intensities do you want to average ?
 nsample         = 1e6;              % nsample ..... how many electrons do you want to simulate for EACH int.?
-int_spacing     = 300;              % int_spacing ... how many intensities do you want to have in the linspace?
+int_spacing     = 80;              % int_spacing ... how many intensities do you want to have in the linspace?
 
 %% Cross section para meters
 atom                = 'Xe';

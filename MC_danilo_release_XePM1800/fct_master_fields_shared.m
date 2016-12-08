@@ -1,4 +1,4 @@
-function [ tgrid, A, E_real, E , Env, r, pulselength ] = fct_master_fields_shared( PlotOpt, type, start_at_0, wvlnm, IWcm, CEP, dt, cutoff, z, kdoubleprime, fwhm_nochirp, n_c )
+function [ tgrid, A, E_real, Env, pulselength ] = fct_master_fields_shared( PlotOpt, type, start_at_0, wvlnm, IWcm, CEP, dt, cutoff, z, kdoubleprime, fwhm_nochirp, n_c )
 %FCT_MASTER_FIELDS by Danilo Zille
 
 % Version: 2.1
@@ -6,7 +6,6 @@ function [ tgrid, A, E_real, E , Env, r, pulselength ] = fct_master_fields_share
 % 1.0 ... include gauss
 % 2.0 ... include sin2
 % 2.1 ... include pulselength output
-
 
 % Input:
 %
@@ -64,10 +63,6 @@ if (strcmp(type,'gauss'))
     pulselength  = tgrid(max(ind))-tgrid(min(ind));        
 
     
-    
-    
-    
-    
 elseif (strcmp(type,'sin2'))
 
     ww=omega/(2.0*n_c);
@@ -91,27 +86,6 @@ elseif (strcmp(type,'sin2'))
     pulselength  = tgrid(max(ind))-tgrid(min(ind));
 
 end
-
-    A_interp = [0 A];
-    for i = 1:length(A)
-        A_interp(i) = (A_interp(i)+A_interp(i+1))/2;
-    end
-    A_interp = A_interp(1:1:end-1);
-    A        = [0 A(1:1:end-1)];
-
-    % integration vector potential from -infinity to t
-    ALPHA = cumsum(A_interp(:))*dt;
-    ALPHA = [0 ; ALPHA(1:1:end-1)];
-
-    %integration (vector potential)² from -infinity to t
-    BETA = cumsum(A_interp.^2)*dt;
-    BETA = [0 BETA(1:1:end-1)];
-
-    %trajectorie of electron released at time tr
-    v = @(tr_index) A - A(tr_index);
-    r = @(tr_index) ALPHA - ALPHA(tr_index)-A(tr_index).*(tgrid'-tgrid(tr_index));
-
-
 
 pulselength = pulselength / 41.34; % to fs              
     

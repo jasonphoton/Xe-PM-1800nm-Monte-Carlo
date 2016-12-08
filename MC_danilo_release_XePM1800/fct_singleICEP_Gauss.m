@@ -16,10 +16,28 @@ T        = 2.*pi./omega;
 %% define the field
 PlotOpt   = 0;
 cutoff    = 0.0001;            %   cutoff for guassian field
-[ tgrid, A, E_real, E , Env, r, pulselength ] = fct_master_fields_shared( PlotOpt, type, start_at_0, wvlnm,...
+[ tgrid, A, E, Env, pulselength ] = fct_master_fields_shared( PlotOpt, type, start_at_0, wvlnm,...
                                          IWcm, CEP, dt, cutoff, z, kdoubleprime, fwhm_nochirp, n_c );
  
+    A_interp = [0 A];
+    for i = 1:length(A)
+        A_interp(i) = (A_interp(i)+A_interp(i+1))/2;
+    end
+    A_interp = A_interp(1:1:end-1);
+    A        = [0 A(1:1:end-1)];
 
+    % integration vector potential from -infinity to t
+    ALPHA = cumsum(A_interp(:))*dt;
+    ALPHA = [0 ; ALPHA(1:1:end-1)];
+
+    %integration (vector potential)² from -infinity to t
+    BETA = cumsum(A_interp.^2)*dt;
+    BETA = [0 BETA(1:1:end-1)];
+
+    %trajectorie of electron released at time tr
+    v = @(tr_index) A - A(tr_index);
+    r = @(tr_index) ALPHA - ALPHA(tr_index)-A(tr_index).*(tgrid'-tgrid(tr_index));
+    
 %% function handle for bsi
 Fc = @(kappa_,Z_,m_) (kappa_.^4)./(8.*(2.*Z_-kappa_.*(m_+1)));
 
@@ -29,17 +47,17 @@ PlotOpt          = 0;
 tbiSwitch        = 1;
 AtomString       = atom;
 [Ip kappa Z Cnl l beta alphaN alphaI] = fct_get_Atom(AtomString);
-Up       = (0.09337.*IWcm.*(wvlm.^2))./27.211;   % au
+Up               = (0.09337.*IWcm.*(wvlm.^2))./27.211;   % au
 gamma            = sqrt(abs(Ip)/(2*Up));
 
-Ip    = Ip.*ones(1,length(E));
-Z     = Z.*ones(1,length(E));
-Cnl   = Cnl.*ones(1,length(E));
-l     = l*ones(1,length(E));
-beta  = beta*ones(1,length(E));
-m     = 0*ones(1,length(E));
-alphaN= alphaN.*ones(1,length(E));
-alphaI= alphaI.*ones(1,length(E));
+Ip               = Ip.*ones(1,length(E));
+Z                = Z.*ones(1,length(E));
+Cnl              = Cnl.*ones(1,length(E));
+l                = l*ones(1,length(E));
+beta             = beta*ones(1,length(E));
+m                = 0*ones(1,length(E));
+alphaN           = alphaN.*ones(1,length(E));
+alphaI           = alphaI.*ones(1,length(E));
 %Ip    = Ip-0.5.*(alphaN-alphaI).*E.^2;
 Fc_GenA_H1s_wo_tbi_wo_me  = Fc(kappa,Z,m);
 [IonAmp_GenA_H1s_wo_tbi_wo_me Yield_GenA_H1s_wo_tbi_wo_me] = fct_TolRate_GenAtom_TBIcor(E,tgrid,Ip,Z,Cnl,l,m,beta,SaturationSwitch,tbiSwitch,PlotOpt);
@@ -109,7 +127,7 @@ end
 
       sigtg =@(q,theta)  fct_na_cs_fortran( q,theta,energy,cs_total );    % fct handle for numeric cross section
 
-   rc   = 0.5871;   % 31e-12 m
+    rc   = 0.5871;   % 31e-12 m
     rcov = rc;
     
 %% %% find return list
@@ -206,8 +224,8 @@ PlotOpt = 0;
 % % % % vzf_dir;
 
 %% all thogether
-vxf_dir =vxf_dir';
-vyf_dir =  vyf_dir';
+vxf_dir = vxf_dir';
+vyf_dir = vyf_dir';
 vzf_dir = vzf_dir';
 
 
