@@ -1,20 +1,24 @@
-function [vxf_all vyf_all vzf_all vxf_dir vyf_dir vzf_dir vxf_resc vyf_resc vzf_resc T] = fct_singleICEP_v0(int_index, IWcm, CEP, atom, nsample,savename,dt,s,wvlm...
-                                                                                                             cross_section_fname, cutoff_winkel, save_tables, table_name) 
+function [vxf_all vyf_all vzf_all vxf_dir vyf_dir vzf_dir vxf_resc vyf_resc vzf_resc T] = fct_singleICEP_v0_Gauss(int_index, IWcm,CEP,pulse_,atom,nsample,savename,dt,s,...
+                                                                                                           cross_section_fname, cutoff_winkel, save_tables, table_name,...
+                                                                                                           type, start_at_0, wvlnm, cutoff, z, kdoubleprime, fwhm_nochirp, n_c) 
 % int_index is used to create a new table a the beginning of intensity averaging loop
 
 %% parameters for the laser pulse 
 c0       = 299792458./(2.1876912633e6);          % au, speed of light 
-wvlnm    = wvlm * 1e9;
+n        = pulse_(1);                            % propto pulse duration
+N        = pulse_(2);
+wvlm     = pulse_(3);                            % 
 wvl      = wvlm/(5.2917720859e-11);              % [au]
 omega    = (2*pi*c0)/wvl;                        % [au], angular frequency
 T        = 2.*pi./omega;
 
 
 %% define the field
-
-[ tgrid, A, E, Env ] = fct_master_fields( IWcm, CEP, dt, type, start_at_0, wvlnm,...
-                                           cutoff, z, k_2prime, fwhm_ftl, PlotOpt)
-
+PlotOpt   = 0;
+cutoff    = 0.0001;            %   cutoff for guassian field
+[ tgrid, A, E_real, E , Env, r, pulselength ] = fct_master_fields_shared( PlotOpt, type, start_at_0, wvlnm,...
+                                         IWcm, CEP, dt, cutoff, z, kdoubleprime, fwhm_nochirp, n_c );
+ 
 
 %% function handle for bsi
 Fc = @(kappa_,Z_,m_) (kappa_.^4)./(8.*(2.*Z_-kappa_.*(m_+1)));

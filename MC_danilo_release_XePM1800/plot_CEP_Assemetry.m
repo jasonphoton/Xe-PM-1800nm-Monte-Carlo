@@ -4,12 +4,12 @@ clear all
 
 wvlm            = 1800e-9; 
 I0              = 8e13;   
-nr_ceps         = 25;
+nr_ceps         = 50;
 cutoff_angle    = 5; % opening of the cone, in DEG
 save_ati_switch = 0;
 
 pulse_length    = 13.1; 
-folder_name     = 'n_3_N_0_wvl_1800_I0_8.0e+13_dt_0.1_kmax_300_nsample_1e+06';
+folder_name     = 'n_3_N_0_wvl_1800_I0_8.0e+13_dt_0.1_kmax_300_nsample_9e+05';
 % CEP_ati_spec_l;
 % CEP_ati_spec_r;
 
@@ -158,4 +158,9 @@ toc
     plot(theta,rho,'r.'); hold on
     grid on
         
-  
+  figure (2)
+      pcolor(CEPaxis,Eaxis,CEP_ati_asy_spec')
+    colorbar
+    shading flat
+    title('Asymmetry')
+    

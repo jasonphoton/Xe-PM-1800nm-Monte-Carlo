@@ -8,15 +8,17 @@ cutoff_angle    = 5; % opening of the cone, in DEG
 save_ati_switch = 0;
 
 pulse_length    = 13.1; 
-folder_name     = 'n_3_N_0_wvl_1800_I0_8.0e+13_dt_0.1_kmax_300_nsample_1e+06';
+folder_name     = 'Xe_1800nm_8.0e+13Wcm2_300kmax_25ceps_1e+06nsample_13.1fs_0mm';
 a = 0;
 b = 0;
 
 for ii = 1:nr_ceps            %%   n=1, start at ii =2, cause cep 1 only has half of the data.
 
-    file_name     = strcat(folder_name,'\1800nm_Xe_',...
-                        num2str(pulse_length),'fs_',num2str(ii),'_25ceps_CEP.mat');
-
+%     file_name     = strcat(folder_name,'\1800nm_Xe_',...
+%                         num2str(pulse_length),'fs_',num2str(ii),'_50ceps_CEP.mat');
+    
+     file_name     = strcat(folder_name,'\',num2str(ii),'_25ceps_CEP.mat');  % new field
+    
     load(file_name)
         
     fct_plot_ati_single_CEP(wvlm, I0, cutoff_angle,ii, save_ati_switch, nr_ceps,...
@@ -45,5 +47,6 @@ end
 figure;
 semilogy(E_axis_ati, a,'r.'); hold on
 semilogy(E_axis_ati, ati_spec_r,'b.');
+ylim([1e-5 1e2])
 grid on
 
