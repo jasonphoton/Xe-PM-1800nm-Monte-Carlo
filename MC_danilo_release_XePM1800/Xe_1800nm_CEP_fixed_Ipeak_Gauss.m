@@ -1,4 +1,4 @@
-close all
+% close all
 clear all
 
 %%  Pulse parameters
@@ -11,24 +11,25 @@ fwhm_nochirp    = 8.7;              % FWHM of FTL
 n_c             = 6;                % only for sin2 field, numbers of cycles  
 n               = 3;                % not used
 N               = 0;                % old code not used
-PlotOpt         = 0;
+PlotOpt         = 1;
 CEP             = 0;
 dt              = 0.01;
 %% Calculation parameters
-kmax            = 80;              % kmax ..... over how many intensities do you want to average ?
-nsample         = 1e6;              % nsample ..... how many electrons do you want to simulate for EACH int.?
-int_spacing     = 80;              % int_spacing ... how many intensities do you want to have in the linspace?
+kmax            = 2;              % kmax ..... over how many intensities do you want to average ?
+nsample         = 1e7;              % nsample ..... how many electrons do you want to simulate for EACH int.?
+int_spacing     = 100;              % int_spacing ... how many intensities do you want to have in the linspace?
+
 
 %% Cross section para meters
 atom                = 'Xe';
 cutoff_winkel       = 20;             % cutoff_winkel ... the angle until which you want to set the cross section constant in DEGREE (used to take care of the divergent forward-scattering)
 cross_section_fname = 'xe_cs.mat';
 
-%% define the field
+%% define the field - this part is useless, none of the created fields are used. (only good for debugging maybe=)
 start_at_0      = 0;                 % Gauss field start point. normally is 0
 kdoubleprime    = 0;                 % chirp
 z               = 0;                 % propagation distance, no chirp with z = 0
-cutoff          = 0.0001;
+cutoff          = 0.00000001;
 
 [ tgrid, A, E_real, Env, pulselength ] = fct_master_fields_shared( PlotOpt, type, start_at_0, ...
                                        wvlnm, IWcm, CEP, dt, cutoff, z, kdoubleprime, fwhm_nochirp, n_c );

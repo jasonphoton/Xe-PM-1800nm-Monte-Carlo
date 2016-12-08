@@ -34,10 +34,12 @@ PlotOpt              = 0;
 
 % ion yield in igrid from intensity distribution
 IonYield = zeros(1,length(hist_Isample_Vavg));
+
 for l=1:1:NI_Vavg
     [Yield]  = fct_get_IonYield(atom,Iaxis_Vavg(l),0,pulse);        % CEP = 0 ist a good estimate
     IonYield(l) = Yield;  
 end
+
 hist_Isample_Vavg = hist_Isample_Vavg./max(hist_Isample_Vavg);
 IonYield          = IonYield./max(IonYield);
 Y_Vavg_Iyield     = (hist_Isample_Vavg.*IonYield)./sum(hist_Isample_Vavg.*IonYield);
@@ -109,6 +111,8 @@ movefile(strcat(atom,'.mat'),foldername)
 end
 
 end
+
+% % check here    reading label
 
 function [vxf_all vyf_all vzf_all vxf_dir vyf_dir vzf_dir vxf_resc vyf_resc vzf_resc T] = singleICEP_v0(IWcm,CEP,pulse_,atom,nsample,savename,dt,s) 
 

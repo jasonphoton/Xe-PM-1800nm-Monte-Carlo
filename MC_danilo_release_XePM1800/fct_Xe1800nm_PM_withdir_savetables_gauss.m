@@ -3,7 +3,7 @@ function   fct_Xe1800nm_PM_withdir_savetables_Guass( n, N, CEP, nr_ceps, kmax, n
                                            type, start_at_0, wvlnm, cutoff, z, kdoubleprime, fwhm_nochirp, n_c)
 
 % this is the master function to use for the MC Xenon phase meter simulations
-% at 18000 nm, some laser parameters need to be changed IN the function and
+% at 1800 nm, some laser parameters need to be changed IN the function and
 % aren't passed as a variable, e.g. wvlm, w0, ...
 
 % Input variables:
@@ -67,7 +67,7 @@ hist_Isample= hist(Isample,Iaxis_Vavg);
 % prepare name1 for this run
 savestr =  ['n',num2str(n),'_N',num2str(N),'_',atom,'_',num2str(wvlm./1e-9),'_Ip',num2str(I0,'%10.1e\n')];
 
-resol = 0.02; %0.002 ist ok, aber ehr zu fein, 0.0857 == 0.1eV
+resol = 0.02; %0.002 ist ok, aber ehr zu fein
 
 Up       = (0.09337.*I0.*(wvlm.^2))./27.211;   % aumu
 % set up the size of the histogram
